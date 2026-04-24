@@ -12,3 +12,20 @@ class OCREngine:
     def process(self, image_path):
         img = Image.open(image_path)
         return self.model(img)
+
+    def advanced_vision_ocr(image_path):
+        prompt = """
+        Analizează imaginea și extrage textul și formulele matematice.
+        - Folosește Markdown pentru structură.
+        - Folosește LaTeX pentru toate formulele matematice (încadrate în $ sau $$).
+        - Identifică titlurile și listele.
+        - Ignoră liniile de caiet și zgomotul.
+        """
+        try:
+            response = ollama.chat(
+                model='llava',
+                messages=[{'role': 'user', 'content': prompt, 'images': [image_path]}]
+            )
+            return response['message']['content']
+        except Exception as e:
+            return f"Eroare la procesarea AI: {str(e)}"
