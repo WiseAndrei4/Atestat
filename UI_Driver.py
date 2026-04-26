@@ -10,13 +10,11 @@ class MathNoteApp(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        # Inițializăm motorul OCR (Poate dura câteva secunde)
-        self.model = None
+        self.model='moondream'
 
         self.title("MathKnowledge Graph OCR")
         self.geometry("1100x600")
 
-        # --- UI LAYOUT (Sidebar & Main) ---
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
 
@@ -43,20 +41,11 @@ class MathNoteApp(ctk.CTk):
         self.textbox = ctk.CTkTextbox(self.main_frame, width=600, height=300)
         self.textbox.grid(row=1, column=0, padx=20, pady=10, sticky="nsew")
 
-    def load_model(self):
-        """Încarcă modelul doar când e nevoie, pentru a nu bloca pornirea aplicației."""
-        if self.model is None:
-            self.label_status.configure(text="Se încarcă modelul AI (te rugăm așteaptă)...")
-            self.update()
-            self.model = LatexOCR()
-
     def batch_process(self):
-        # 1. Selectăm folderul
         folder_path = filedialog.askdirectory()
         if not folder_path:
             return
 
-        # 2. Căutăm pozele
         extensions = ['*.jpg', '*.jpeg', '*.png']
         image_files = []
         for ext in extensions:
@@ -73,21 +62,16 @@ class MathNoteApp(ctk.CTk):
 
         full_content = ""
 
-        # 3. Iterăm prin fiecare imagine
         for i, img_path in enumerate(image_files):
             file_name = os.path.basename(img_path)
             self.label_status.configure(text=f"AI procesează {i + 1}/{len(image_files)}: {file_name}")
             self.update()
 
             prompt = f"""
-            Analizează imaginea '{file_name}' de matematică.
-            - Extrage textul și formulele în LaTeX ($ pentru inline, $$ pentru bloc).
-            - Păstrează structura (Titlu, Exemple, Teoreme).
-            - Curăță orice eroare de scriere de mână.
+            Extrage textul din imaginea data, in format markdown.
             """
 
             try:
-                # Trimitem imaginea curentă la Ollama
                 response = ollama.chat(
                     model='moondream',
                     messages=[{'role': 'user', 'content': prompt, 'images': [img_path]}]
@@ -95,7 +79,6 @@ class MathNoteApp(ctk.CTk):
 
                 result = response['message']['content']
 
-                # Formatăm frumos în interfață
                 entry_header = f"\n\n{'=' * 20}\n FIȘIER: {file_name}\n{'=' * 20}\n\n"
                 self.textbox.insert("end", entry_header + result)
                 self.textbox.see("end")  # Auto-scroll la final

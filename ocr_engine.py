@@ -6,7 +6,6 @@ import ollama
 
 class OCREngine:
     def __init__(self):
-        # Încarcă modelele în VRAM (dacă există GPU) sau RAM
         self.model = LatexOCR()
 
     def process(self, image_path):
