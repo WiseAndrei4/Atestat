@@ -1,0 +1,155 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #2b2b2b;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#1f538d", "font": {"color": "white"}, "id": "The Satanic School of Poetry", "label": "The Satanic School of Poetry", "shape": "dot", "title": "The Satanic School of Poetry"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "Lord Byron", "label": "Lord Byron", "shape": "dot", "title": "Lord Byron"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "Percy Bysshe Shelley", "label": "Percy Bysshe Shelley", "shape": "dot", "title": "Percy Bysshe Shelley"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "Robert Southey", "label": "Robert Southey", "shape": "dot", "title": "Robert Southey"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "moral corruption", "label": "moral corruption", "shape": "dot", "title": "moral corruption"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "pride", "label": "pride", "shape": "dot", "title": "pride"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "rebellious impiety", "label": "rebellious impiety", "shape": "dot", "title": "rebellious impiety"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "The Necessity of Atheism", "label": "The Necessity of Atheism", "shape": "dot", "title": "The Necessity of Atheism"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "Oxford", "label": "Oxford", "shape": "dot", "title": "Oxford"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "social norms", "label": "social norms", "shape": "dot", "title": "social norms"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "religious beliefs", "label": "religious beliefs", "shape": "dot", "title": "religious beliefs"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "interpersonal justice", "label": "interpersonal justice", "shape": "dot", "title": "interpersonal justice"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "the perceived fairness of the treatment received by employees from authorities", "label": "the perceived fairness of the treatment received by employees from authorities", "shape": "dot", "title": "the perceived fairness of the treatment received by employees from authorities"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "respect rule", "label": "respect rule", "shape": "dot", "title": "respect rule"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "authorities treat employees in a dignified and sincere manner", "label": "authorities treat employees in a dignified and sincere manner", "shape": "dot", "title": "authorities treat employees in a dignified and sincere manner"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "propriety rule", "label": "propriety rule", "shape": "dot", "title": "propriety rule"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "authorities refrain from making improper or offensive remarks", "label": "authorities refrain from making improper or offensive remarks", "shape": "dot", "title": "authorities refrain from making improper or offensive remarks"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "abusive supervision", "label": "abusive supervision", "shape": "dot", "title": "abusive supervision"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "interpersonally unjust actions", "label": "interpersonally unjust actions", "shape": "dot", "title": "interpersonally unjust actions"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "sustained display of hostile verbal and non-verbal behaviors", "label": "sustained display of hostile verbal and non-verbal behaviors", "shape": "dot", "title": "sustained display of hostile verbal and non-verbal behaviors"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "physical contact", "label": "physical contact", "shape": "dot", "title": "physical contact"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "informational justice", "label": "informational justice", "shape": "dot", "title": "informational justice"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "the perceived fairness of the communications provided to employees from authorities", "label": "the perceived fairness of the communications provided to employees from authorities", "shape": "dot", "title": "the perceived fairness of the communications provided to employees from authorities"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "justification rule", "label": "justification rule", "shape": "dot", "title": "justification rule"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "authorities explain decision-making procedures and outcomes comprehensively and reasonably", "label": "authorities explain decision-making procedures and outcomes comprehensively and reasonably", "shape": "dot", "title": "authorities explain decision-making procedures and outcomes comprehensively and reasonably"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "truthfulness rule", "label": "truthfulness rule", "shape": "dot", "title": "truthfulness rule"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "communications be honest and candid", "label": "communications be honest and candid", "shape": "dot", "title": "communications be honest and candid"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "all four justices", "label": "all four justices", "shape": "dot", "title": "all four justices"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "employee trust levels", "label": "employee trust levels", "shape": "dot", "title": "employee trust levels"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "ethics", "label": "ethics", "shape": "dot", "title": "ethics"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "prescriptive in nature", "label": "prescriptive in nature", "shape": "dot", "title": "prescriptive in nature"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "how people ought to act using various codes and principles", "label": "how people ought to act using various codes and principles", "shape": "dot", "title": "how people ought to act using various codes and principles"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "dominant lens in discussions of legal ethics, medical ethics, and economics", "label": "dominant lens in discussions of legal ethics, medical ethics, and economics", "shape": "dot", "title": "dominant lens in discussions of legal ethics, medical ethics, and economics"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "descriptive in nature", "label": "descriptive in nature", "shape": "dot", "title": "descriptive in nature"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "how people tend to act based on individual and situational characteristics", "label": "how people tend to act based on individual and situational characteristics", "shape": "dot", "title": "how people tend to act based on individual and situational characteristics"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "psychology", "label": "psychology", "shape": "dot", "title": "psychology"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "unethical behavior", "label": "unethical behavior", "shape": "dot", "title": "unethical behavior"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "behavior that clearly violates accepted norms of morality", "label": "behavior that clearly violates accepted norms of morality", "shape": "dot", "title": "behavior that clearly violates accepted norms of morality"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "merely ethical behavior", "label": "merely ethical behavior", "shape": "dot", "title": "merely ethical behavior"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "behavior that adheres to minimally accepted standards of morality", "label": "behavior that adheres to minimally accepted standards of morality", "shape": "dot", "title": "behavior that adheres to minimally accepted standards of morality"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "especially ethical behavior", "label": "especially ethical behavior", "shape": "dot", "title": "especially ethical behavior"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "behaviors that exceed minimally accepted standards of morality", "label": "behaviors that exceed minimally accepted standards of morality", "shape": "dot", "title": "behaviors that exceed minimally accepted standards of morality"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "whistle-blowing", "label": "whistle-blowing", "shape": "dot", "title": "whistle-blowing"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "former or current employees exposing illegal or immoral actions by their organization", "label": "former or current employees exposing illegal or immoral actions by their organization", "shape": "dot", "title": "former or current employees exposing illegal or immoral actions by their organization"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "four-component model of ethical decision making", "label": "four-component model of ethical decision making", "shape": "dot", "title": "four-component model of ethical decision making"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "ethical behavior results from a multistage sequence", "label": "ethical behavior results from a multistage sequence", "shape": "dot", "title": "ethical behavior results from a multistage sequence"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "moral awareness", "label": "moral awareness", "shape": "dot", "title": "moral awareness"}, {"color": "#1f538d", "font": {"color": "white"}, "id": "authority recognizes that a moral issue exists", "label": "authority recognizes that a moral issue exists", "shape": "dot", "title": "authority recognizes that a moral issue exists"}]);
+                  edges = new vis.DataSet([{"arrows": "to", "color": "#ffffff", "from": "The Satanic School of Poetry", "label": "referenced_by", "to": "Lord Byron"}, {"arrows": "to", "color": "#ffffff", "from": "The Satanic School of Poetry", "label": "referenced_by", "to": "Percy Bysshe Shelley"}, {"arrows": "to", "color": "#ffffff", "from": "Robert Southey", "label": "coined_term", "to": "The Satanic School of Poetry"}, {"arrows": "to", "color": "#ffffff", "from": "Robert Southey", "label": "used_as_pejorative", "to": "The Satanic School of Poetry"}, {"arrows": "to", "color": "#ffffff", "from": "The Satanic School of Poetry", "label": "associated_with", "to": "moral corruption"}, {"arrows": "to", "color": "#ffffff", "from": "The Satanic School of Poetry", "label": "associated_with", "to": "pride"}, {"arrows": "to", "color": "#ffffff", "from": "The Satanic School of Poetry", "label": "associated_with", "to": "rebellious impiety"}, {"arrows": "to", "color": "#ffffff", "from": "The Satanic School of Poetry", "label": "criticized_by", "to": "Robert Southey"}, {"arrows": "to", "color": "#ffffff", "from": "Percy Bysshe Shelley", "label": "works_reviewed_by", "to": "Robert Southey"}, {"arrows": "to", "color": "#ffffff", "from": "The Satanic School of Poetry", "label": "embodied_by", "to": "Percy Bysshe Shelley"}, {"arrows": "to", "color": "#ffffff", "from": "The Satanic School of Poetry", "label": "embodied_by", "to": "Lord Byron"}, {"arrows": "to", "color": "#ffffff", "from": "Percy Bysshe Shelley", "label": "challenged_societal_norm", "to": "The Necessity of Atheism"}, {"arrows": "to", "color": "#ffffff", "from": "Percy Bysshe Shelley", "label": "published_essay", "to": "The Necessity of Atheism"}, {"arrows": "to", "color": "#ffffff", "from": "Oxford", "label": "expelled_from", "to": "Percy Bysshe Shelley"}, {"arrows": "to", "color": "#ffffff", "from": "Percy Bysshe Shelley", "label": "atheist_views", "to": "The Necessity of Atheism"}, {"arrows": "to", "color": "#ffffff", "from": "The Satanic School of Poetry", "label": "challenged", "to": "social norms"}, {"arrows": "to", "color": "#ffffff", "from": "The Satanic School of Poetry", "label": "challenged", "to": "religious beliefs"}, {"arrows": "to", "color": "#ffffff", "from": "interpersonal justice", "label": "described_as", "to": "the perceived fairness of the treatment received by employees from authorities"}, {"arrows": "to", "color": "#ffffff", "from": "respect rule", "label": "component_of", "to": "interpersonal justice"}, {"arrows": "to", "color": "#ffffff", "from": "respect rule", "label": "describes", "to": "authorities treat employees in a dignified and sincere manner"}, {"arrows": "to", "color": "#ffffff", "from": "propriety rule", "label": "component_of", "to": "interpersonal justice"}, {"arrows": "to", "color": "#ffffff", "from": "propriety rule", "label": "describes", "to": "authorities refrain from making improper or offensive remarks"}, {"arrows": "to", "color": "#ffffff", "from": "abusive supervision", "label": "created_by", "to": "interpersonally unjust actions"}, {"arrows": "to", "color": "#ffffff", "from": "abusive supervision", "label": "characterized_by", "to": "sustained display of hostile verbal and non-verbal behaviors"}, {"arrows": "to", "color": "#ffffff", "from": "abusive supervision", "label": "excludes", "to": "physical contact"}, {"arrows": "to", "color": "#ffffff", "from": "informational justice", "label": "described_as", "to": "the perceived fairness of the communications provided to employees from authorities"}, {"arrows": "to", "color": "#ffffff", "from": "justification rule", "label": "component_of", "to": "informational justice"}, {"arrows": "to", "color": "#ffffff", "from": "justification rule", "label": "describes", "to": "authorities explain decision-making procedures and outcomes comprehensively and reasonably"}, {"arrows": "to", "color": "#ffffff", "from": "truthfulness rule", "label": "component_of", "to": "informational justice"}, {"arrows": "to", "color": "#ffffff", "from": "truthfulness rule", "label": "describes", "to": "communications be honest and candid"}, {"arrows": "to", "color": "#ffffff", "from": "all four justices", "label": "strong_correlations_with", "to": "employee trust levels"}, {"arrows": "to", "color": "#ffffff", "from": "ethics", "label": "described_as", "to": "prescriptive in nature"}, {"arrows": "to", "color": "#ffffff", "from": "ethics", "label": "describes", "to": "how people ought to act using various codes and principles"}, {"arrows": "to", "color": "#ffffff", "from": "ethics", "label": "described_as", "to": "dominant lens in discussions of legal ethics, medical ethics, and economics"}, {"arrows": "to", "color": "#ffffff", "from": "ethics", "label": "described_as", "to": "descriptive in nature"}, {"arrows": "to", "color": "#ffffff", "from": "ethics", "label": "describes", "to": "how people tend to act based on individual and situational characteristics"}, {"arrows": "to", "color": "#ffffff", "from": "ethics", "label": "dominant_lens_in", "to": "psychology"}, {"arrows": "to", "color": "#ffffff", "from": "unethical behavior", "label": "described_as", "to": "behavior that clearly violates accepted norms of morality"}, {"arrows": "to", "color": "#ffffff", "from": "merely ethical behavior", "label": "described_as", "to": "behavior that adheres to minimally accepted standards of morality"}, {"arrows": "to", "color": "#ffffff", "from": "especially ethical behavior", "label": "described_as", "to": "behaviors that exceed minimally accepted standards of morality"}, {"arrows": "to", "color": "#ffffff", "from": "whistle-blowing", "label": "defined_as", "to": "former or current employees exposing illegal or immoral actions by their organization"}, {"arrows": "to", "color": "#ffffff", "from": "four-component model of ethical decision making", "label": "argues_that", "to": "ethical behavior results from a multistage sequence"}, {"arrows": "to", "color": "#ffffff", "from": "moral awareness", "label": "component_of", "to": "four-component model of ethical decision making"}, {"arrows": "to", "color": "#ffffff", "from": "moral awareness", "label": "describes", "to": "authority recognizes that a moral issue exists"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>

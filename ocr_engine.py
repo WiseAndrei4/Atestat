@@ -12,17 +12,17 @@ class OCREngine:
         img = Image.open(image_path)
         return self.model(img)
 
-    def advanced_vision_ocr(image_path):
+    def ollama_ocr(image_path):
         prompt = """
-        Analizează imaginea și extrage textul și formulele matematice.
-        - Folosește Markdown pentru structură.
-        - Folosește LaTeX pentru toate formulele matematice (încadrate în $ sau $$).
-        - Identifică titlurile și listele.
-        - Ignoră liniile de caiet și zgomotul.
+        Analyse the text and extract the mathematical text.
+        - Use Markdown for structure.
+        - Use LaTex for mathematical formulas (between $ or $$).
+        - Identify titles and lists.
+        - Ignore textbook lining and noise.
         """
         try:
             response = ollama.chat(
-                model='llava',
+                model='ministral-3',
                 messages=[{'role': 'user', 'content': prompt, 'images': [image_path]}]
             )
             return response['message']['content']
